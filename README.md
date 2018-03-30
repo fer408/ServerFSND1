@@ -4,7 +4,7 @@ Fernando Alarcon's Web server
 Ip adress: http://18.217.97.70/
 URL: ec2-18-217-97-70.us-east-2.compute.amazonaws.com
 
-#Software installed:
+# Software installed:
 
 easy_install
 pip
@@ -21,13 +21,13 @@ git
 apache2
 mod_wsgi 
 
-Grader ssh-key:
+#Grader ssh-key:
 
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTeK0fAXh0LMA/GRsz6uwKaqL98t8HCm7WaXVbEXb7DNvLEtdWOSArSmS5bB9m9vLOBA4gtJLooJYqPlz2ab+qq2pAKm4kwxwPgzjDySWRroJjg2P6r/MdpgYovNqtGgfMmXrzJ3KyJRok+/zj82j5LY9aQaSpEHumIBmJspsiVtxGLeBZ1bEzmD2n4+vSN1yCHHRYezsHD/ABmYAjXkP3oe/oLd+TjGv1VVY2j5aIkikYlEgJINQx/cCqRwCeFeC2QCOVAH+E4XCmWIza9F7C7/6G1bqXQrOtkMLv5Br9jSuZFjK7ZUKVe6PKoY/ZZ/ehEeC3CGV377gPKl6JCyCR alarc@DESKTOP-B66OI3S
 
 Summary of configurations made:
 
-Amazon lightsail Server Instance set-up:
+#Amazon lightsail Server Instance set-up:
 
 1.Went to Amazon Lightsail website https://signin.aws.amazon.com/signin?redirect_uri=https%3A%2F%2Flightsail.aws.amazon.com%2Fls%2Fwebapp%3Fstate%3DhashArgs%2523%26isauthcode%3Dtrue&client_id=arn%3Aaws%3Aiam%3A%3A015428540659%3Auser%2Fparksidewebapp&forceMobileApp=0 and created an account.
 
@@ -38,7 +38,7 @@ Amazon lightsail Server Instance set-up:
 4. loged in from my local machine with the command: ssh -i ~/.ssh/LightsailDefaultPrivateKey-us-east-2.pem ubuntu@18.217.97.70
 
 
-Configuring the Server:
+#Configuring the Server:
 
 1. Added firewall and allowed access from 2200,80 and 123 by running the commands:
 sudo ufw 2200
