@@ -53,7 +53,7 @@ sudo ufw 123
 4. updated packages and upgraded packages by running the commands:
 sudo apt-get update and sudo apt-get upgrade
 
-Added new user and gave user sudo privileges
+#Added new user and gave user sudo privileges
 
 1. Created new user grader with command:
 sudo adduser grader
@@ -64,7 +64,7 @@ grader ALL=(ALL:ALL) ALL
 127.0.1.1 ip-10-20-37-65
 in order to prevent an error message as prescribed by a external source I used in order to set up my project.
 
-Create keygen pair for grader
+#Create keygen pair for grader
 
 1.In my local machine I made the keygen by typing the following command:
 ssh-keygen -f ~/.ssh/udacity_key.rsa
@@ -84,22 +84,22 @@ sudo chmod 644 /home/grader/.ssh/authorized_keys
 9.Gave grader owner rights by typing the command:
 sudo chown -R grader:grader /home/grader/.ssh
 
-Logging in to remote server:
+#Logging in to remote server:
 1.Before attempting to log in I went and changed the port to 2200 in my  /etc/ssh/sshd_config file by typing the command:
 sudo vim /etc/ssh/sshd_config and changing port 22 to port 2200
 2.I re-started my server instance and was kicked out of the server in my local machine.
 3.Logged in to my remote server as grader by typing the command:
 ssh -i ~/.ssh/udacity_key.rsa -p 2200 grader@18.217.97.70
 
-Key-based authentication enforcement:
+#Key-based authentication enforcement:
 1.I went into my /etc/ssh/sshd_config file by typing the command:
 sudo vim /etc/ssh/sshd_config and changing PasswordAuthentication to PasswordAuthentication no
 
-Disable root ssh login:
+#Disable root ssh login:
 1.I went into my /etc/ssh/sshd_config file by typing the command:
 sudo vim /etc/ssh/sshd_config and changed PermitRootLogin to PermitRootLogin no
 
-Installing packages I will need:
+#Installing packages I will need:
 1. Went about installing the following packages:
 
 easy_install
@@ -119,7 +119,7 @@ mod_wsgi
 libpq-dev python-dev
 postgresql-contrib
 
-Running Apache server to see if things work:
+#Running Apache server to see if things work:
 1.Ran the command:
 sudo a2enmod wsgi
 2.Ran the command:
