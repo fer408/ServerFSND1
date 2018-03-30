@@ -310,3 +310,10 @@ python /var/www/catalog/catalog/__init__.py
 16. Visited ip of 18.217.97.70
 
 17.Sucess!
+
+A special thanks to the following sources:
+https://github.com/rrjoson/udacity-linux-server-configuration/blob/master/README.md
+https://github.com/twhetzel/ud299-nd-linux-server-configuration
+https://github.com/callforsky/udacity-linux-configuration
+https://stackoverflow.com/questions/24001147/python-bind-socket-error-errno-13-permission-denied?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+https://stackoverflow.com/questions/5439917/flaskr-syntaxerror
