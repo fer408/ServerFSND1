@@ -6,6 +6,8 @@ URL: ec2-18-217-97-70.us-east-2.compute.amazonaws.com
 
 #Software installed:
 
+easy_install
+pip
 httplib2 
 oauth2client 
 sqlalchemy 
@@ -19,11 +21,11 @@ git
 apache2
 mod_wsgi 
 
-#Grader ssh-key:
+Grader ssh-key:
 
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDTeK0fAXh0LMA/GRsz6uwKaqL98t8HCm7WaXVbEXb7DNvLEtdWOSArSmS5bB9m9vLOBA4gtJLooJYqPlz2ab+qq2pAKm4kwxwPgzjDySWRroJjg2P6r/MdpgYovNqtGgfMmXrzJ3KyJRok+/zj82j5LY9aQaSpEHumIBmJspsiVtxGLeBZ1bEzmD2n4+vSN1yCHHRYezsHD/ABmYAjXkP3oe/oLd+TjGv1VVY2j5aIkikYlEgJINQx/cCqRwCeFeC2QCOVAH+E4XCmWIza9F7C7/6G1bqXQrOtkMLv5Br9jSuZFjK7ZUKVe6PKoY/ZZ/ehEeC3CGV377gPKl6JCyCR alarc@DESKTOP-B66OI3S
 
-#Summary of configurations made:
+Summary of configurations made:
 
 Amazon lightsail Server Instance set-up:
 
@@ -51,7 +53,7 @@ sudo ufw 123
 4. updated packages and upgraded packages by running the commands:
 sudo apt-get update and sudo apt-get upgrade
 
-# Added new user and gave user sudo privileges
+Added new user and gave user sudo privileges
 
 1. Created new user grader with command:
 sudo adduser grader
@@ -62,7 +64,7 @@ grader ALL=(ALL:ALL) ALL
 127.0.1.1 ip-10-20-37-65
 in order to prevent an error message as prescribed by a external source I used in order to set up my project.
 
-#Create keygen pair for grader
+Create keygen pair for grader
 
 1.In my local machine I made the keygen by typing the following command:
 ssh-keygen -f ~/.ssh/udacity_key.rsa
@@ -82,24 +84,26 @@ sudo chmod 644 /home/grader/.ssh/authorized_keys
 9.Gave grader owner rights by typing the command:
 sudo chown -R grader:grader /home/grader/.ssh
 
-#Logging in to remote server
+Logging in to remote server:
 1.Before attempting to log in I went and changed the port to 2200 in my  /etc/ssh/sshd_config file by typing the command:
 sudo vim /etc/ssh/sshd_config and changing port 22 to port 2200
 2.I re-started my server instance and was kicked out of the server in my local machine.
 3.Logged in to my remote server as grader by typing the command:
 ssh -i ~/.ssh/udacity_key.rsa -p 2200 grader@18.217.97.70
 
-#Key-based authentication enforcement
+Key-based authentication enforcement:
 1.I went into my /etc/ssh/sshd_config file by typing the command:
 sudo vim /etc/ssh/sshd_config and changing PasswordAuthentication to PasswordAuthentication no
 
-#Disable root ssh login
+Disable root ssh login:
 1.I went into my /etc/ssh/sshd_config file by typing the command:
 sudo vim /etc/ssh/sshd_config and changed PermitRootLogin to PermitRootLogin no
 
-#Installing packages I will need
+Installing packages I will need:
 1. Went about installing the following packages:
 
+easy_install
+pip
 httplib2 
 oauth2client 
 sqlalchemy 
@@ -112,9 +116,109 @@ postgresql
 git
 apache2
 mod_wsgi 
+libpq-dev python-dev
+postgresql-contrib
 
-#Running Apache server to see if things work
+Running Apache server to see if things work:
+1.Ran the command:
+sudo a2enmod wsgi
+2.Ran the command:
+sudo service apache2 start
+3.Visited servers ip of:
+18.217.97.70 to verify it's working
 
+#Download git to server.
+1.went into /var/www directory with the command:
+cd /var/www
+2.made catalog with following command:
+sudo mkdir catalog
+3.I went into catalog directory with following command:
+cd catalog
+4.Gave grader owner privileges with the command:
+sudo chown -R grader:grader catalog
+5. Then I cloned my github repository to a new directory called catalog witht the
+following command:
+git clone https://github.com/fer408/FSNDServer.git catalog
 
+#Changed time to UTC
+1.I change the time on my server by typing the command sudo dpkg-reconfigure tzdata
 
+#Setting up virtualenv and server.
+1.I installed virtual machine witht the following commands:
+sudo pip install virtualenv
+sudo virtualenv venv
+source venv/bin/activate
+sudo chmod -R 777 venv
+2.re-named my project.py file to __init__.py
+3.used vim catalog/__init__.py to go into the file and change the lines where client_secrets.json is to 
+/var/www/catalog/catalog/client_secrets.json 
+4. I then went to the location where 
+if __name__ == '__main__':
+	app.secret_key=if __name__ == '__main__':
+        app.secret_key = ''
+        app.debug = True
+        app.run(host='0.0.0.0',port=5000)
+and changed it to:
+if __name__ == '__main__':
+        app.secret_key = 'gamers_secret_hoops'
+        app.debug = True
+        app.run(host='18.217.97.70',port=80)
+5. I created a wsgi file for catalog by typing the command:
+sudo vim catalog.wsgi
+6. I then pasted this code in:
+import sys
+import logging
+logging.basicConfig(stream=sys.stderr)
+sys.path.insert(0, "/var/www/catalog/")
 
+from catalog import app as application
+application.secret_key = 'supersecretkey'
+
+7.I then configure the virtual host by running the command:
+sudo nano /etc/apache2/sites-available/catalog.conf
+I pasted this clode inside of the file:
+<VirtualHost *:80>
+    ServerName [YOUR PUBLIC IP ADDRESS]
+    ServerAlias [YOUR AMAZON LIGHTSAIL HOST NAME]
+    ServerAdmin admin@35.167.27.204
+    WSGIDaemonProcess catalog python-path=/var/www/catalog:/var/www/catalog/venv/lib/python2.7/site-packages
+    WSGIProcessGroup catalog
+    WSGIScriptAlias / /var/www/catalog/catalog.wsgi
+    <Directory /var/www/catalog/catalog/>
+        Order allow,deny
+        Allow from all
+    </Directory>
+    Alias /static /var/www/catalog/catalog/static
+    <Directory /var/www/catalog/catalog/static/>
+        Order allow,deny
+        Allow from all
+    </Directory>
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    LogLevel warn
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+
+8. I changed to postgres user with the command:
+sudo su - postgress
+9.I then logged in to psql with the command:
+psql
+10.I ran the following commands to created user and databaser
+CREATE USER catalog WITH PASSWORD 'password';
+ALTER USER catalog CREATEDB;
+CREATE DATABASE catalog WITH OWNER catalog;
+ \c catalog
+REVOKE ALL ON SCHEMA public FROM public;
+GRANT ALL ON SCHEMA public TO catalog;
+\q
+exit
+11.Setup the database by typing :
+python /var/www/catalog/catalog/database_setup.py
+12.Setup the items in the database by running the command :
+python /var/www/catalog/catalog/lotsofmenus.py
+13.Ran the project by running the command:
+python /var/www/catalog/catalog/__init__.py
+14.ran command sudo a2ensite catalog to start catalog in Apache as mentioned in the classroom chat with other students 
+15.Ran the command sudo service apache2 reload
+16. Visited ip of 18.217.97.70
+
+17.Sucess!
