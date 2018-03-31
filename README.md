@@ -34,7 +34,7 @@ apache2
 
 mod_wsgi 
 
-#Grader ssh-key:
+Grader ssh-key:
 
 -----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEA224+UfYBtEB70sEeFI6Ru1IuadTPIAbbJxnoaFCfgufK0oQA
